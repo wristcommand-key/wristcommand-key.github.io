@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WristCommand 개인정보 안내 · Privacy</title>
+<style>
+  :root { --bg:#ffffff; --fg:#1a1a1a; --dim:#5a5a5a; --line:#e3e3e3; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#121212; --fg:#ececec; --dim:#a8a8a8; --line:#2c2c2c; } }
+  body { background:var(--bg); color:var(--fg); font:16px/1.65 -apple-system, "Apple SD Gothic Neo", "Segoe UI", sans-serif; margin:0; padding:24px 16px 48px; }
+  main { max-width:720px; margin:0 auto; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  h2 { font-size:18px; margin:28px 0 8px; }
+  p, li { margin:6px 0; }
+  .dim { color:var(--dim); font-size:14px; }
+  hr { border:0; border-top:1px solid var(--line); margin:40px 0; }
+  code { font-size:14px; word-break:break-all; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>WristCommand 개인정보 안내</h1>
+<p class="dim">최종 수정 2026-09-24</p>
+
+<p>WristCommand는 테슬라 주인이 가민 시계로 <b>자기 차</b>를 잠그고 열고 조종하는 Connect IQ 시계 앱입니다. 개인 개발자가 운영합니다.</p>
+
+<h2>우리가 모으는 정보</h2>
+<p>없습니다. 개발자는 사용자 정보를 모으거나 저장하는 서버·데이터베이스를 두지 않고, 앱에 분석 도구도 넣지 않았습니다.</p>
+
+<h2>시계 안에만 저장되는 정보</h2>
+<ul>
+  <li>테슬라 로그인 토큰(접근·갱신)</li>
+  <li>차 이름·차대번호(VIN) — 명령을 보낼 차를 가리키는 데 씁니다</li>
+  <li>시계 키 — 차에 키카드로 등록하는 서명용 키로, 시계 안에서 만들어집니다</li>
+  <li>최근 차 상태(잠금·배터리 등) — 화면 표시용</li>
+</ul>
+<p>이 정보는 시계의 앱 저장 공간에만 있고, 앱을 지우면 함께 지워집니다.</p>
+
+<h2>첫 로그인 중계</h2>
+<p>처음 로그인할 때 시계는 테슬라가 준 1회용 로그인 코드를 중계 서버(<code>wristcommand-relay.wristcommand.workers.dev</code>, Cloudflare Workers)에 보냅니다. 중계 서버는 그 코드를 테슬라 토큰으로 바꿔 시계에 돌려줄 뿐, 코드나 토큰을 저장하거나 기록하지 않습니다. 호스팅 업체인 Cloudflare는 요청 수 같은 일반적인 접속 정보를 처리할 수 있습니다.</p>
+
+<h2>테슬라·가민</h2>
+<ul>
+  <li>차 명령과 상태 조회는 폰의 Garmin Connect 앱을 거쳐 테슬라 Fleet API로 갑니다. 이 과정은 테슬라와 가민의 개인정보 처리방침을 따릅니다.</li>
+  <li>폰이 안 될 때 시계가 차와 블루투스로 직접 주고받는 명령은 어떤 서버도 거치지 않습니다.</li>
+  <li>WristCommand에 준 권한은 테슬라 계정에서 언제든 철회할 수 있습니다.</li>
+</ul>
+
+<h2>제3자 제공</h2>
+<p>사용자 정보를 팔거나 다른 곳에 넘기지 않습니다.</p>
+
+<h2>문의</h2>
+<p>kimsalgi@gmail.com</p>
+
+<hr>
+
+<h1>WristCommand Privacy</h1>
+<p class="dim">Last updated 2026-09-24</p>
+
+<p>WristCommand is a Garmin Connect IQ watch app that lets Tesla owners lock, unlock and control <b>their own car</b> from the wrist. It is run by an individual developer.</p>
+
+<h2>What we collect</h2>
+<p>Nothing. The developer runs no server or database that collects or stores user information, and the app contains no analytics.</p>
+
+<h2>What stays on your watch</h2>
+<ul>
+  <li>Your Tesla sign-in tokens (access and refresh)</li>
+  <li>Vehicle names and VINs, used to address your car</li>
+  <li>A watch key, created on the watch, that you pair to your car with its key card and that signs commands</li>
+  <li>Recent vehicle status (lock state, battery, etc.) for display</li>
+</ul>
+<p>This information is kept only in the app's storage on the watch and is removed when you uninstall the app.</p>
+
+<h2>Sign-in relay</h2>
+<p>When you first sign in, the watch sends the one-time sign-in code issued by Tesla to our relay (<code>wristcommand-relay.wristcommand.workers.dev</code>, on Cloudflare Workers). The relay exchanges that code for Tesla tokens and returns them to the watch. It does not store or log the code or the tokens. Cloudflare, as the hosting provider, may process standard request metadata such as request counts.</p>
+
+<h2>Tesla and Garmin</h2>
+<ul>
+  <li>Commands and status requests travel through the Garmin Connect app on your phone to Tesla's Fleet API, under Tesla's and Garmin's privacy policies.</li>
+  <li>When your phone is unavailable, commands sent directly from the watch to the car over Bluetooth do not pass through any server.</li>
+  <li>You can revoke WristCommand's access from your Tesla account at any time.</li>
+</ul>
+
+<h2>Sharing</h2>
+<p>We do not sell or share user information.</p>
+
+<h2>Contact</h2>
+<p>kimsalgi@gmail.com</p>
+
+</main>
+</body>
+</html>
+<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​​​​‌‌‌​​‌​​‌‌​​‌​​​‌‌​‌​​​​‌‌​​​‌​​‌‌​‌​‌​​‌‌​​‌​​​‌‌‌​​‌​​‌‌‌​‌​​​‌‌​‌​‌​​‌‌​​‌‌​‌‌​​​‌​​‌‌​​‌​​​​‌‌​‌​‌​‌‌​​‌​​​​‌‌​​​‌​‌‌​​​‌‌​‌‌​​​‌​​​‌‌​​​​​​‌‌​‌​​​​‌‌​​​​​​‌‌​​‌‌​​‌‌​​‌‌​​‌‌​​​‌​​‌‌​‌‌​​​‌‌‌​‌​​‌‌​​‌​‌​​‌‌​‌​‌​‌‌​​‌​‌​‌‌​​​​‌​​‌‌‌​​​​​‌‌‌​​‌​‌‌​​​‌‌​‌‌​​​‌​​​‌‌​​‌‌​‌‌​​‌​​​​‌‌​​‌‌​​‌‌​​​​​​‌‌​​​‌​‌‌​​​‌​​‌‌​​​‌​​​‌‌​‌​​ -->
