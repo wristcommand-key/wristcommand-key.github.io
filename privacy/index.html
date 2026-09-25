@@ -15,80 +15,189 @@
   .dim { color:var(--dim); font-size:14px; }
   hr { border:0; border-top:1px solid var(--line); margin:40px 0; }
   code { font-size:14px; word-break:break-all; }
+  table { border-collapse:collapse; width:100%; font-size:15px; }
+  td { border-top:1px solid var(--line); padding:6px 8px 6px 0; vertical-align:top; }
+  td:first-child { white-space:nowrap; color:var(--dim); }
 </style>
 </head>
 <body>
 <main>
 
 <h1>WristCommand 개인정보 안내</h1>
-<p class="dim">최종 수정 2026-09-24</p>
+<p class="dim">시행 2026-09-25 · 변경 이력은 맨 아래</p>
 
-<p>WristCommand는 테슬라 주인이 가민 시계로 <b>자기 차</b>를 잠그고 열고 조종하는 Connect IQ 시계 앱입니다. 개인 개발자가 운영합니다.</p>
+<p>WristCommand(시계 앱)와 WristCommand Face(시계 화면)는 테슬라 주인이 가민 시계로 <b>자기 차</b>를 잠그고 열고 조종하는 Connect IQ 앱입니다. 개인 개발자가 무료로 운영하며, 테슬라(Tesla, Inc.)·가민과 관계가 없습니다.</p>
 
-<h2>우리가 모으는 정보</h2>
-<p>없습니다. 개발자는 사용자 정보를 모으거나 저장하는 서버·데이터베이스를 두지 않고, 앱에 분석 도구도 넣지 않았습니다.</p>
+<h2>1. 개발자가 보관하는 정보</h2>
+<p><b>없습니다.</b> 개발자는 사용자 정보를 모아 두는 서버·데이터베이스를 두지 않고, 앱에 분석 도구도 넣지 않았습니다.</p>
 
-<h2>시계 안에만 저장되는 정보</h2>
+<h2>2. 처리 목적</h2>
+<p>테슬라 계정 연결, 차에 명령 보내기, 차 상태를 시계에 보여 주기.</p>
+
+<h2>3. 처리하는 정보와 저장 위치</h2>
 <ul>
-  <li>테슬라 로그인 토큰(접근·갱신)</li>
-  <li>차 이름·차대번호(VIN) — 명령을 보낼 차를 가리키는 데 씁니다</li>
-  <li>시계 키 — 차에 키카드로 등록하는 서명용 키로, 시계 안에서 만들어집니다</li>
-  <li>최근 차 상태(잠금·배터리 등) — 화면 표시용</li>
-</ul>
-<p>이 정보는 시계의 앱 저장 공간에만 있고, 앱을 지우면 함께 지워집니다.</p>
-
-<h2>첫 로그인 중계</h2>
-<p>처음 로그인할 때 시계는 테슬라가 준 1회용 로그인 코드를 중계 서버(<code>wristcommand-relay.wristcommand.workers.dev</code>, Cloudflare Workers)에 보냅니다. 중계 서버는 그 코드를 테슬라 토큰으로 바꿔 시계에 돌려줄 뿐, 코드나 토큰을 저장하거나 기록하지 않습니다. 호스팅 업체인 Cloudflare는 요청 수 같은 일반적인 접속 정보를 처리할 수 있습니다.</p>
-
-<h2>테슬라·가민</h2>
-<ul>
-  <li>차 명령과 상태 조회는 폰의 Garmin Connect 앱을 거쳐 테슬라 Fleet API로 갑니다. 이 과정은 테슬라와 가민의 개인정보 처리방침을 따릅니다.</li>
-  <li>폰이 안 될 때 시계가 차와 블루투스로 직접 주고받는 명령은 어떤 서버도 거치지 않습니다.</li>
-  <li>WristCommand에 준 권한은 테슬라 계정에서 언제든 철회할 수 있습니다.</li>
+  <li>테슬라 로그인 토큰(접근·갱신) — 시계 안</li>
+  <li>차 이름·차대번호(VIN) — 시계 안. 명령을 보낼 차를 가리키는 데 씁니다</li>
+  <li>차 상태(잠금·배터리·주행 가능 거리·실내 온도) — 시계 안, 화면 표시용</li>
+  <li>시계 키 — 시계 안에서 만들어지는 서명용 키로, 사용자가 키카드로 차에 등록합니다</li>
+  <li>로그인할 때의 1회용 로그인 코드 — 로그인할 때마다 중계 서버를 거칠 뿐 저장되지 않습니다(이때 Cloudflare가 IP 주소 같은 접속 정보를 처리할 수 있습니다, 6장)</li>
 </ul>
 
-<h2>제3자 제공</h2>
+<h2>4. 보유 기간과 파기</h2>
+<p>시계 안의 정보는 앱을 지우면 함께 지워집니다. 중계 서버 코드는 로그인 코드와 토큰을 저장하지 않습니다. 테슬라 계정에서 WristCommand 권한을 거두면 시계에 남은 토큰도 쓸 수 없게 됩니다.</p>
+
+<h2>5. 동의와 거부</h2>
+<p>시계 앱은 테슬라 로그인 <b>전에</b> 위 내용을 보여 주고 동의를 받습니다. 동의하지 않을 수 있으며, 그러면 테슬라 로그인과 인터넷 명령은 쓸 수 없고 차 가까이에서 블루투스로만 쓸 수 있습니다.</p>
+
+<h2>6. 처리 위탁·국외 이전</h2>
+<table>
+  <tr><td>이전 근거</td><td>개인정보 보호법 제28조의8 제1항 제3호 — 서비스 이용 계약을 이행하는 데 필요한 처리위탁으로, 이 안내에 공개하고 로그인 전 개인정보 동의 화면에서도 알립니다</td></tr>
+  <tr><td>받는 곳</td><td>Cloudflare, Inc.(미국) — 101 Townsend St., San Francisco, CA 94107, 개인정보보호책임자 dpo@cloudflare.com</td></tr>
+  <tr><td>하는 일</td><td>로그인 중계(<code>wristcommand-relay.wristcommand.workers.dev</code>): 테슬라가 준 1회용 로그인 코드를 테슬라 토큰으로 바꿔 시계에 돌려줍니다</td></tr>
+  <tr><td>이전 항목</td><td>1회용 로그인 코드, 그 코드로 받은 테슬라 토큰(돌려주는 응답), 접속 정보(IP 주소·요청 시각 등)</td></tr>
+  <tr><td>국가·시기·방법</td><td>미국 등 Cloudflare가 운영하는 국가(Cloudflare 개인정보 처리방침: 주로 미국·유럽경제지역에 보관하고, 운영하는 여러 나라에서 전송·접근할 수 있음) · 로그인할 때마다(처음, 그리고 토큰이 끊기거나 앱을 다시 설치해 다시 로그인할 때) · 암호화 통신(HTTPS)</td></tr>
+  <tr><td>이용 목적·보유 기간</td><td>토큰 교환에만 쓰고, 교환 뒤 바로 버립니다. 중계 서버 코드는 코드와 토큰을 저장하거나 기록하지 않습니다. 호스팅 업체인 Cloudflare는 보안·운영을 위해 IP 주소, 요청 시각 같은 일반 접속 정보를 처리할 수 있으며, 개발자는 이를 따로 모아 보관하지 않습니다</td></tr>
+  <tr><td>거부 방법과 효과</td><td>개인정보 동의를 하지 않거나 로그인하지 않으면 됩니다. 그러면 인터넷 명령은 쓸 수 없고 블루투스로만 씁니다</td></tr>
+</table>
+<p>차 명령과 상태 조회는 폰의 Garmin Connect 앱을 거쳐 사용자의 테슬라 계정으로 테슬라 서버(Tesla, Inc., 미국)에 갑니다. 그 처리는 <a href="https://www.tesla.com/legal/privacy">테슬라 고객 개인정보 처리방침</a>과 가민 개인정보 처리방침을 따릅니다. 폰이 안 될 때 시계가 차와 블루투스로 직접 주고받는 명령은 어떤 서버도 거치지 않습니다.</p>
+
+<h2>7. 안전 조치</h2>
+<ul>
+  <li>모든 인터넷 통신은 암호화(HTTPS)합니다.</li>
+  <li>테슬라 앱 비밀값은 설치 파일에 넣지 않고 중계 서버의 비밀 변수에만 둡니다.</li>
+  <li>토큰은 시계 앱 저장 공간에만 두고, 화면과 기록에 쓰지 않습니다.</li>
+</ul>
+
+<h2>8. 위치 정보</h2>
+<p>앱은 테슬라에 차 위치 권한을 요청하지 않고, 차 위치를 조회하지도 않습니다. 시계 화면은 시계 날씨 기능의 관측 지점으로 일출·일몰을 시계 안에서 계산할 뿐이며, 시계 화면에는 통신 권한이 없어 이 정보를 밖으로 보내지 않습니다.</p>
+
+<h2>9. 앱이 쓰는 시계 기능</h2>
+<p>블루투스(차와 직접 통신) · 통신(폰을 거쳐 테슬라 서버와 연결) · 컴플리케이션(시계 화면에 차 상태 표시) · 백그라운드(선언돼 있으나 현재 쓰지 않음). 시계 화면은 컴플리케이션 읽기만 씁니다.</p>
+
+<h2>10. 자동 수집 장치</h2>
+<p>쿠키·분석 도구를 쓰지 않습니다.</p>
+
+<h2>11. 만 14세 미만</h2>
+<p>만 14세 미만은 이 앱을 쓸 수 없습니다.</p>
+
+<h2>12. 제3자 제공</h2>
 <p>사용자 정보를 팔거나 다른 곳에 넘기지 않습니다.</p>
 
-<h2>문의</h2>
-<p>kimsalgi21@gmail.com</p>
+<h2>13. 권리 행사</h2>
+<p>개발자는 사용자 정보를 보관하지 않아 열람·정정·삭제할 기록이 없습니다. 시계 안 정보는 앱을 지우면 바로 지워지고, 동의 철회는 앱을 지우고 테슬라 계정에서 WristCommand 권한을 거두면 됩니다. 궁금한 점은 아래 메일로 받습니다.</p>
+
+<h2>14. 개인정보 보호책임자</h2>
+<p>김홍정(WristCommand 개발자) · kimsalgi21@gmail.com</p>
+
+<h2>부록. 시계 개인정보 동의 문구(판 1, 2026-09-25 시행)</h2>
+<p class="dim">「LTE 로그인」을 누르면 테슬라 로그인 전에 시계에 뜨는 문구입니다. 사용자가 「동의합니다」를 누른 판 번호와 시각은 시계 안에만 기록됩니다.</p>
+<ul>
+  <li>테슬라 계정을 연결해 차에 명령을 보내고 차 상태를 보여 주려고 아래 정보를 씁니다.</li>
+  <li>쓰는 정보: 테슬라 로그인 토큰, 차 이름ㆍ차대번호(VIN), 차 상태(잠금ㆍ배터리ㆍ주행 가능 거리ㆍ실내 온도).</li>
+  <li>이 정보는 시계 안에만 저장되고 앱을 지우면 함께 지워집니다. 개발자 서버에는 저장하지 않습니다.</li>
+  <li>로그인할 때마다(처음, 그리고 토큰이 끊기거나 앱을 다시 설치해 다시 로그인할 때) 1회용 로그인 코드가 암호화 통신으로 중계 서버(Cloudflare, 미국 회사)를 거쳐 토큰으로 바뀝니다. 이때 Cloudflare가 IP 주소 같은 접속 정보를 처리할 수 있습니다. 중계 서버는 코드와 토큰을 저장하지 않습니다.</li>
+  <li>명령과 조회는 테슬라 서버(미국)를 거치며 테슬라 개인정보 처리방침을 따릅니다: tesla.com/legal/privacy</li>
+  <li>동의하지 않을 수 있습니다. 그러면 테슬라 로그인과 인터넷 명령은 쓸 수 없고 블루투스로만 씁니다. 동의하지 않으려면 뒤로 가기를 누르세요.</li>
+  <li>개인정보 처리 책임자: 김홍정(WristCommand 개발자, 문의 kimsalgi21@gmail.com). 개인정보의 열람ㆍ정정ㆍ삭제를 요청할 수 있고, 동의는 언제든 무료로 철회할 수 있습니다. 앱을 지우고 테슬라 계정에서 WristCommand 권한을 거두면 됩니다. 이 동의 문구는 개인정보 안내에서 언제든 볼 수 있습니다.</li>
+  <li>자세히: wristcommand-key.github.io/privacy</li>
+  <li>「동의합니다」를 누르면 위 개인정보 처리(중계 서버와 테슬라의 처리 포함)에 동의하고, 테슬라 개인정보 처리방침을 받아 본 것으로 합니다.</li>
+</ul>
+
+<h2>변경 이력</h2>
+<ul class="dim">
+  <li>2026-09-25 공개판: 로그인 전 개인정보 동의(부록에 문구 전문), 이전 근거 명시, 차 위치 권한 삭제, 처리 위탁·국외 이전·보유 기간·보호책임자 항목 추가, 「우리가 모으는 정보」를 「개발자가 보관하는 정보」로 바로잡음</li>
+  <li>2026-09-24 처음 게시</li>
+</ul>
 
 <hr>
 
 <h1>WristCommand Privacy</h1>
-<p class="dim">Last updated 2026-09-24</p>
+<p class="dim">Effective 2026-09-25 · change history at the bottom</p>
 
-<p>WristCommand is a Garmin Connect IQ watch app that lets Tesla owners lock, unlock and control <b>their own car</b> from the wrist. It is run by an individual developer.</p>
+<p>WristCommand (watch app) and WristCommand Face (watch face) are Connect IQ apps that let Tesla owners lock, unlock and control <b>their own car</b> from a Garmin watch. They are run free of charge by an individual developer and are not affiliated with Tesla, Inc. or Garmin.</p>
 
-<h2>What we collect</h2>
-<p>Nothing. The developer runs no server or database that collects or stores user information, and the app contains no analytics.</p>
+<h2>1. What the developer keeps</h2>
+<p><b>Nothing.</b> The developer runs no server or database that stores user information, and the apps contain no analytics.</p>
 
-<h2>What stays on your watch</h2>
+<h2>2. Purpose</h2>
+<p>Connecting your Tesla account, sending commands to your car, and showing its status on your watch.</p>
+
+<h2>3. Data processed and where it stays</h2>
 <ul>
-  <li>Your Tesla sign-in tokens (access and refresh)</li>
-  <li>Vehicle names and VINs, used to address your car</li>
-  <li>A watch key, created on the watch, that you pair to your car with its key card and that signs commands</li>
-  <li>Recent vehicle status (lock state, battery, etc.) for display</li>
-</ul>
-<p>This information is kept only in the app's storage on the watch and is removed when you uninstall the app.</p>
-
-<h2>Sign-in relay</h2>
-<p>When you first sign in, the watch sends the one-time sign-in code issued by Tesla to our relay (<code>wristcommand-relay.wristcommand.workers.dev</code>, on Cloudflare Workers). The relay exchanges that code for Tesla tokens and returns them to the watch. It does not store or log the code or the tokens. Cloudflare, as the hosting provider, may process standard request metadata such as request counts.</p>
-
-<h2>Tesla and Garmin</h2>
-<ul>
-  <li>Commands and status requests travel through the Garmin Connect app on your phone to Tesla's Fleet API, under Tesla's and Garmin's privacy policies.</li>
-  <li>When your phone is unavailable, commands sent directly from the watch to the car over Bluetooth do not pass through any server.</li>
-  <li>You can revoke WristCommand's access from your Tesla account at any time.</li>
+  <li>Tesla sign-in tokens (access and refresh) — on the watch</li>
+  <li>Car names and VINs — on the watch, used to address your car</li>
+  <li>Car status (lock, battery, range, cabin temperature) — on the watch, for display</li>
+  <li>Watch key — a signing key created on the watch that you pair to your car with its key card</li>
+  <li>The one-time sign-in code at sign-in — passes through the relay each time you sign in and is not stored (Cloudflare may process connection data such as your IP address at that moment; see section 6)</li>
 </ul>
 
-<h2>Sharing</h2>
+<h2>4. Retention and deletion</h2>
+<p>Data on the watch is deleted when you uninstall the app. The relay code does not store the sign-in code or the tokens. Revoking WristCommand's access in your Tesla account makes any tokens left on the watch unusable.</p>
+
+<h2>5. Consent and declining</h2>
+<p>The watch app shows this information and asks for consent <b>before</b> Tesla sign-in. You may decline; then Tesla sign-in and internet commands are unavailable and the app works over Bluetooth near the car only.</p>
+
+<h2>6. Service provider and international transfer</h2>
+<table>
+  <tr><td>Legal basis</td><td>Article 28-8(1)(3) of the Korean Personal Information Protection Act — entrustment needed to perform the service, disclosed in this notice and on the personal-data consent screen before sign-in</td></tr>
+  <tr><td>Recipient</td><td>Cloudflare, Inc. (USA) — 101 Townsend St., San Francisco, CA 94107, Data Protection Officer dpo@cloudflare.com</td></tr>
+  <tr><td>Task</td><td>Sign-in relay (<code>wristcommand-relay.wristcommand.workers.dev</code>): exchanges the one-time sign-in code issued by Tesla for Tesla tokens and returns them to the watch</td></tr>
+  <tr><td>Data</td><td>The one-time sign-in code, the Tesla tokens returned for it, and connection data (IP address, request time, etc.)</td></tr>
+  <tr><td>Where, when, how</td><td>The USA and other countries where Cloudflare operates (per Cloudflare's privacy policy, stored primarily in the USA and the EEA and may be transferred and accessed from around the world) · each time you sign in (first sign-in, and again if the tokens stop working or you reinstall) · encrypted connection (HTTPS)</td></tr>
+  <tr><td>Use and retention</td><td>Used only for the token exchange and discarded right after. The relay code does not store or log the code or the tokens. Cloudflare, as the hosting provider, may process standard connection data such as IP addresses and request times for security and operation; the developer does not collect or keep it</td></tr>
+  <tr><td>How to decline</td><td>Do not give personal-data consent, or do not sign in. Internet commands are then unavailable and the app works over Bluetooth only</td></tr>
+</table>
+<p>Commands and status requests travel through the Garmin Connect app on your phone, with your own Tesla account, to Tesla's servers (Tesla, Inc., USA), under the <a href="https://www.tesla.com/legal/privacy">Tesla Customer Privacy Notice</a> and Garmin's privacy policy. When your phone is unavailable, commands sent directly from the watch to the car over Bluetooth do not pass through any server.</p>
+
+<h2>7. Security</h2>
+<ul>
+  <li>All internet traffic is encrypted (HTTPS).</li>
+  <li>The Tesla app secret is not in the app package; it is kept only as a secret variable on the relay.</li>
+  <li>Tokens stay in the watch app's storage and are never shown on screen or written to logs.</li>
+</ul>
+
+<h2>8. Location</h2>
+<p>The app does not request Tesla's vehicle location permission and never reads your car's location. The watch face computes sunrise and sunset on the watch from the observation point of the watch's weather feature; the watch face has no communication permission and never sends this out.</p>
+
+<h2>9. Watch capabilities used</h2>
+<p>Bluetooth (talks to the car directly) · Communications (reaches Tesla's servers through your phone) · Complications (shows car status on the watch face) · Background (declared but currently unused). The watch face only reads complications.</p>
+
+<h2>10. Cookies and analytics</h2>
+<p>None.</p>
+
+<h2>11. Children</h2>
+<p>Not for children under 14.</p>
+
+<h2>12. Sharing</h2>
 <p>We do not sell or share user information.</p>
 
-<h2>Contact</h2>
-<p>kimsalgi21@gmail.com</p>
+<h2>13. Your rights</h2>
+<p>The developer keeps no user records, so there is nothing to access, correct or delete on our side. Data on the watch is deleted when you uninstall the app; to withdraw consent, uninstall the app and revoke WristCommand's access in your Tesla account. Questions are welcome at the address below.</p>
+
+<h2>14. Privacy officer</h2>
+<p>Kim Hongjeong (김홍정), WristCommand developer · kimsalgi21@gmail.com</p>
+
+<h2>Appendix. Watch personal-data consent text (version 1, effective 2026-09-25)</h2>
+<p class="dim">Shown on the watch before Tesla sign-in when you tap "LTE sign-in". The version and time you tapped "Agree" are recorded only on your watch.</p>
+<ul>
+  <li>To connect your Tesla account, send commands to your car and show its status, the app uses the following.</li>
+  <li>Data used: Tesla sign-in tokens, car names and VINs, car status (lock, battery, range, cabin temperature).</li>
+  <li>This data is stored only on this watch and is deleted when you uninstall the app. It is not stored on any developer server.</li>
+  <li>Each time you sign in (first sign-in, and again if the tokens stop working or you reinstall the app), the one-time sign-in code passes over an encrypted connection through a relay server (Cloudflare, a US company) to be exchanged for tokens. Cloudflare may process connection data such as your IP address. The relay does not store the code or the tokens.</li>
+  <li>Commands and status requests go through Tesla&#x27;s servers (US) under Tesla&#x27;s Privacy Notice: tesla.com/legal/privacy</li>
+  <li>You may decline. Then Tesla sign-in and internet commands are unavailable and the app works over Bluetooth only. To decline, press Back.</li>
+  <li>Data controller: Kim Hongjeong, the WristCommand developer (kimsalgi21@gmail.com). You may ask to access, correct or delete your personal data, and you can withdraw consent at any time free of charge by uninstalling the app and revoking WristCommand&#x27;s access in your Tesla account. This consent text is always available on the Privacy page.</li>
+  <li>Details: wristcommand-key.github.io/privacy</li>
+  <li>Tapping Agree means you consent to the processing above, including by the relay and by Tesla, and acknowledge receipt of Tesla&#x27;s Privacy Notice.</li>
+</ul>
+
+<h2>Change history</h2>
+<ul class="dim">
+  <li>2026-09-25 public release: consent before sign-in (full text in the appendix), legal basis for transfer, vehicle location permission removed, added service provider, international transfer, retention and contact sections; "What we collect" corrected to "What the developer keeps"</li>
+  <li>2026-09-24 first published</li>
+</ul>
 
 </main>
 </body>
 </html>
-<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​​​​‌‌‌​​‌​​‌‌​​‌​​​‌‌​‌​​​​‌‌​​​‌​​‌‌​‌​‌​​‌‌​‌​​​​‌‌​​​​​​‌‌‌​‌​​‌‌​​​‌‌​​‌‌​​​‌​‌‌​​‌​​​‌‌​​​‌​​‌‌​​‌​​​​‌‌​​​‌​‌‌​​​​‌​​‌‌​‌‌‌​‌‌​​​‌‌​​‌‌‌​​​​​‌‌​​‌‌​‌‌​​​‌‌​​‌‌​‌‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​‌​​‌‌‌​‌​​‌‌​​‌‌​​​‌‌​​​‌​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​‌‌‌​​‌‌​​​​​​‌‌​​‌​​​‌‌​​​‌​‌‌​​‌​​​‌‌​​​‌‌​​‌‌​‌​‌​‌‌​​​​‌​​‌‌​​​​​​‌‌​​‌‌​​‌‌​‌‌​​​‌‌​‌​‌ -->
+<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​​​​‌‌‌​​‌​​‌‌​​‌​​​‌‌​‌​‌​​‌‌​​​‌​​‌‌​​‌​​​‌‌​‌​‌​​‌‌‌​​​​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​​‌​​​‌‌‌​​​​‌‌​​‌​‌​​‌‌‌​​​​​‌‌​​‌​​‌‌​​‌‌​​‌‌​​‌‌​​‌‌​​​‌‌​‌‌​​​‌​​‌‌​​‌​‌​‌‌​​​​‌​​‌‌​​‌‌​​‌‌‌​​‌​​‌‌​‌​​​​‌‌‌​​‌​​‌‌‌​‌​​​‌‌​​​​​‌‌​​‌‌​​‌‌​​​‌​​​‌‌​​​​​​‌‌‌​​​​​‌‌​‌‌​​‌‌​​​‌‌​‌‌​​‌​‌​‌‌​​‌​​​‌‌​​​‌​​​‌‌​‌​‌​​‌‌‌​​‌​​‌‌​‌‌‌​​‌‌​‌‌‌​​‌‌​​‌‌​​‌‌​‌​​ -->
