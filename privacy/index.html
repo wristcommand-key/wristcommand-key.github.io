@@ -21,7 +21,7 @@
 <main>
 
 <h1>WristCommand 개인정보 안내</h1>
-<p class="dim">시행 2026-09-27(1.0.1 블루투스 전용판) · 변경 이력은 맨 아래</p>
+<p class="dim">시행 2026-10-01(WristCommand Face 1.0.3) · 변경 이력은 맨 아래</p>
 
 <p>WristCommand(시계 앱)와 WristCommand Face(시계 화면)는 테슬라 주인이 가민 시계로 <b>자기 차</b>를 잠그고 열고 조종하는 Connect IQ 앱입니다. WristCommand는 1.0.1부터 <b>블루투스 전용</b>입니다. 시계가 차 가까이에서 차와 직접 주고받고, 인터넷으로는 아무것도 보내지 않습니다. 개인 개발자가 무료로 운영하며, 테슬라(Tesla, Inc.)·가민과 관계가 없습니다.</p>
 
@@ -36,6 +36,7 @@
   <li>차종·차대번호(VIN) — 사용자가 폰의 Connect IQ Store 앱이나 Garmin Connect 앱에서 WristCommand의 앱 설정에 넣습니다. 가민 서비스가 이 값을 시계로 전달하고(가민 개인정보 처리방침을 따릅니다), 앱은 시계 안에서 차를 찾고 명령에 서명하는 데 씁니다. 개발자에게는 오지 않습니다.</li>
   <li>이전 판(1.0.0)에서 테슬라 로그인으로 받아 둔 차 이름·VIN이 있으면 시계 안에 남아 그대로 씁니다.</li>
   <li>차 상태(잠금·배터리·주행 가능 거리) — 블루투스로 차에서 읽어 시계 안에 둡니다. 화면 표시용입니다.</li>
+  <li>운동·건강 값(WristCommand Face 1.0.3부터) — 시계 화면의 보조값으로 달리기·자전거 거리(오늘·이번 달·올해)나 안정 심박을 고르면, 시계 화면이 시계 안의 활동 기록(종목·시작 시각·거리)과 사용자 프로필(안정 심박)을 읽어 보여 줍니다. 시계 안에는 달마다의 거리 합계와 오늘 거리(그 날짜 포함)만 둡니다. 시계 화면에는 통신 권한이 없어 이 값을 밖으로 보내지 않습니다.</li>
   <li>시계 키 — 시계 안에서 만들어지는 서명용 키로, 사용자가 키카드로 차에 등록합니다.</li>
 </ul>
 
@@ -58,7 +59,7 @@
 <p>앱은 차 위치를 읽지 않습니다. 시계 화면은 시계 날씨 기능의 관측 지점으로 일출·일몰을 시계 안에서 계산할 뿐이며, 시계 화면에는 통신 권한이 없어 이 정보를 밖으로 보내지 않습니다.</p>
 
 <h2>9. 앱이 쓰는 시계 기능</h2>
-<p>블루투스(차와 직접 통신) · 컴플리케이션(시계 화면에 차 상태 표시). 통신·백그라운드 권한은 이전 판의 인터넷 기능 때문에 선언돼 있으나 1.0.1부터 쓰지 않습니다. 시계 화면은 컴플리케이션 읽기만 씁니다.</p>
+<p>블루투스(차와 직접 통신) · 컴플리케이션(시계 화면에 차 상태 표시). 통신·백그라운드 권한은 이전 판의 인터넷 기능 때문에 선언돼 있으나 1.0.1부터 쓰지 않습니다. 시계 화면은 컴플리케이션 읽기와, 1.0.3부터 사용자 프로필(활동 기록·안정 심박) 읽기만 씁니다.</p>
 
 <h2>10. 자동 수집 장치</h2>
 <p>쿠키·분석 도구를 쓰지 않습니다.</p>
@@ -103,6 +104,7 @@
 
 <h2>변경 이력</h2>
 <ul class="dim">
+  <li>2026-10-01 WristCommand Face 1.0.3: 시계 화면 보조값(달리기·자전거 거리, 안정 심박)을 위해 사용자 프로필 권한으로 시계 안의 활동 기록·안정 심박을 읽는다는 내용을 3장·9장에 넣었습니다</li>
   <li>2026-09-27 1.0.1 블루투스 전용판: 테슬라 로그인·인터넷 명령·로그인 중계 서버(Cloudflare)를 없앴습니다. 그에 따라 로그인 전 개인정보 동의(판 1)와 처리 위탁·국외 이전 내용은 15장 「이전 판(1.0.0) 사용자 안내」로 옮겼고, 차종·VIN을 가민 앱 설정으로 받는 내용과 1.0.0 로그인 값 삭제 안내를 넣었습니다</li>
   <li>2026-09-25 공개판(1.0.0): 로그인 전 개인정보 동의, 이전 근거 명시, 차 위치 권한 삭제, 처리 위탁·국외 이전·보유 기간·보호책임자 항목 추가, 「우리가 모으는 정보」를 「개발자가 보관하는 정보」로 바로잡음</li>
   <li>2026-09-24 처음 게시</li>
@@ -111,7 +113,7 @@
 <hr>
 
 <h1>WristCommand Privacy</h1>
-<p class="dim">Effective 2026-09-27 (version 1.0.1, Bluetooth only) · change history at the bottom</p>
+<p class="dim">Effective 2026-10-01 (WristCommand Face 1.0.3) · change history at the bottom</p>
 
 <p>WristCommand (watch app) and WristCommand Face (watch face) are Connect IQ apps that let Tesla owners lock, unlock and control <b>their own car</b> from a Garmin watch. From version 1.0.1, WristCommand is <b>Bluetooth only</b>: the watch talks to the car directly when you are near it and sends nothing over the internet. The apps are run free of charge by an individual developer and are not affiliated with Tesla, Inc. or Garmin.</p>
 
@@ -126,6 +128,7 @@
   <li>Car model and VIN — you enter them in WristCommand's app settings in the Connect IQ Store app or the Garmin Connect app on your phone. Garmin's service delivers them to the watch (under Garmin's privacy policy), and the app uses them on the watch to find your car and sign commands. They are never sent to the developer.</li>
   <li>If you signed in to Tesla with the previous version (1.0.0), the car names and VINs it saved stay on the watch and are still used.</li>
   <li>Car status (lock, battery, range) — read from the car over Bluetooth and kept on the watch, for display.</li>
+  <li>Activity and health values (WristCommand Face 1.0.3 and later) — if you pick running or cycling distance (today, this month, this year) or resting heart rate as a data field, the watch face reads your activity history on the watch (sport, start time, distance) and your user profile (resting heart rate) to show them. Only monthly distance totals and today's distance (with its date) are kept on the watch. The watch face has no communications permission, so these values never leave the watch.</li>
   <li>Watch key — a signing key created on the watch that you pair to your car with its key card.</li>
 </ul>
 
@@ -148,7 +151,7 @@
 <p>The app never reads your car's location. The watch face computes sunrise and sunset on the watch from the observation point of the watch's weather feature; the watch face has no communication permission and never sends this out.</p>
 
 <h2>9. Watch capabilities used</h2>
-<p>Bluetooth (talks to the car directly) · Complications (shows car status on the watch face). The Communications and Background permissions are still declared because of the previous version's internet features, but are not used from 1.0.1. The watch face only reads complications.</p>
+<p>Bluetooth (talks to the car directly) · Complications (shows car status on the watch face). The Communications and Background permissions are still declared because of the previous version's internet features, but are not used from 1.0.1. The watch face only reads complications and, from 1.0.3, your user profile (activity history and resting heart rate).</p>
 
 <h2>10. Cookies and analytics</h2>
 <p>None.</p>
@@ -193,6 +196,7 @@
 
 <h2>Change history</h2>
 <ul class="dim">
+  <li>2026-10-01 WristCommand Face 1.0.3: added to sections 3 and 9 that the watch face uses the User Profile permission to read your activity history and resting heart rate on the watch, for its running/cycling distance and resting heart rate data fields</li>
   <li>2026-09-27 version 1.0.1, Bluetooth only: Tesla sign-in, internet commands and the sign-in relay (Cloudflare) removed. The personal-data consent before sign-in (version 1) and the service provider and international transfer details were moved to section 15 (notice for users of 1.0.0); added how the car model and VIN come from Garmin app settings, and that 1.0.1 deletes 1.0.0 sign-in data</li>
   <li>2026-09-25 public release (1.0.0): consent before sign-in, legal basis for transfer, vehicle location permission removed, added service provider, international transfer, retention and contact sections; "What we collect" corrected to "What the developer keeps"</li>
   <li>2026-09-24 first published</li>
@@ -201,4 +205,4 @@
 </main>
 </body>
 </html>
-<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​​​​‌‌‌​​‌​​‌‌​​‌​​​‌‌​‌‌‌​​‌‌​​​‌​​‌‌​‌‌‌​​‌‌​‌​​​​‌‌​‌‌‌​​‌‌‌​‌​​​‌‌​‌​​​​‌‌​​‌​​​‌‌​​‌​​​‌‌​​​‌​‌‌​​‌​​​‌‌​​‌‌​​​‌‌‌​​‌​​‌‌​​​‌​​‌‌​​​‌​‌‌​​‌​‌​‌‌​​​‌‌​‌‌​​​‌​​‌‌​​​​‌​​‌‌​​​‌​​‌‌​​​​​​‌‌​​‌​​​‌‌‌​‌​​​‌‌​‌‌​​​‌‌​‌​​​‌‌​​‌‌​​‌‌​​‌​‌​‌‌​​​‌​​​‌‌​‌‌‌​​‌‌​‌​​​​‌‌​​​​​‌‌​​‌​‌​‌‌​​​‌‌​‌‌​​‌​​​​‌‌​‌​​​‌‌​​‌‌​​​‌‌‌​​‌​​‌‌​‌‌‌​​‌‌​‌‌​ -->
+<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​‌​​‌‌​​​​​​‌‌​​​​​​‌‌​​​‌​​‌‌​​​‌​​‌‌​‌‌​​​‌‌​​‌​​​‌‌‌​​‌​​‌‌‌​‌​​​‌‌​‌‌​​​‌‌​​‌‌​​‌‌​​‌​​‌‌​​​​‌​​‌‌​‌​‌​‌‌​​‌​​​​‌‌‌​​​​​‌‌‌​​‌​‌‌​​​‌​​​‌‌​​‌‌​​‌‌​​​‌​‌‌​​​‌‌​​‌‌​​‌‌​​‌‌​​‌​​​‌‌​‌‌‌​​‌‌​​​‌​​‌‌‌​‌​​​‌‌​‌‌​​​‌‌‌​​​​​‌‌‌​​​​‌‌​​​‌‌​​‌‌​​‌​​​‌‌​​‌​​​‌‌​‌​​​​‌‌​‌‌‌​​‌‌​‌‌‌​‌‌​​‌‌​​​‌‌​‌‌‌​​‌‌‌​​​​​‌‌​‌​​​‌‌​​‌​​​‌‌​​‌​​​‌‌​​‌​‌ -->
