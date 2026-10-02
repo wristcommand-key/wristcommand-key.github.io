@@ -46,7 +46,7 @@
   <li>차 이름·차대번호(VIN) — 시계 안. 명령을 보낼 차를 가리키는 데 씁니다</li>
   <li>차 상태(잠금·배터리·주행 가능 거리·실내 온도) — 시계 안, 화면 표시용</li>
   <li>시계 키 — 시계 안에서 만들어지는 서명용 키로, 사용자가 키카드로 차에 등록합니다</li>
-  <li>준비·도우미 페이지를 열 때의 접속 정보 — GitHub(6장)</li>
+  <li>준비·도우미 페이지를 열 때와 준비 페이지에서 [게시 확인]을 누를 때의 접속 정보 — GitHub(6장)</li>
 </ul>
 
 <h2>4. 보유 기간과 파기</h2>
@@ -61,7 +61,7 @@
   <tr><td>회사</td><td>GitHub, Inc.(미국) — 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, 개인정보보호책임자 dpo@github.com</td></tr>
   <tr><td>제공하는 것</td><td>준비·도우미 페이지와 이 안내를 내려 주는 정적 페이지 호스팅(GitHub Pages, <code>wristcommand-key.github.io/own/</code>)</td></tr>
   <tr><td>GitHub가 처리하는 항목</td><td>페이지를 열 때의 접속 정보(IP 주소·요청 시각·브라우저 정보 등). 페이지에 입력한 값은 GitHub로 가지 않습니다</td></tr>
-  <tr><td>국가·시기·방법</td><td>미국 등 GitHub가 운영하는 국가 · 준비 페이지나 도우미 페이지를 열 때 · 암호화 통신(HTTPS)</td></tr>
+  <tr><td>국가·시기·방법</td><td>미국 등 GitHub가 운영하는 국가 · 준비 페이지나 도우미 페이지를 열 때, 준비 페이지에서 [게시 확인]을 누를 때 · 암호화 통신(HTTPS)</td></tr>
   <tr><td>이용 목적·보유 기간</td><td>페이지 제공과 보안·운영. 보유 기간은 GitHub 개인정보 처리방침을 따르며, 개발자는 이 정보를 받거나 보관하지 않습니다</td></tr>
   <tr><td>피하는 방법과 효과</td><td>페이지를 열지 않거나 개인정보 동의를 하지 않으면 됩니다. 그러면 내 개발자 계정을 연결할 수 없고 블루투스로만 씁니다</td></tr>
 </table>
@@ -72,7 +72,7 @@
 <ul>
   <li>모든 인터넷 통신은 암호화(HTTPS)합니다.</li>
   <li>내 개발자 계정의 비밀값은 시계 앱 저장 공간에만 두고, Garmin Connect 설정 칸·화면·기록에 쓰지 않습니다.</li>
-  <li>준비·도우미 페이지는 인터넷 요청을 막아 둔 정적 페이지입니다. 한 줄에는 비밀값이 들어 있으니 쓰고 나서 클립보드(키보드의 클립보드 기록 포함)를 비우도록 안내합니다.</li>
+  <li>도우미 페이지는 인터넷 요청을 막아 둔 정적 페이지입니다. 준비 페이지도 인터넷 요청을 막아 두었고, 7번 [게시 확인]을 누를 때만 사용자 본인 공개키 주소(아이디.github.io)를 한 번 읽어 옵니다. 이때도 입력한 값은 보내지 않습니다. 한 줄에는 비밀값이 들어 있으니 쓰고 나서 클립보드(키보드의 클립보드 기록 포함)를 비우도록 안내합니다.</li>
   <li>토큰은 시계 앱 저장 공간에만 두고, 화면과 기록에 쓰지 않습니다.</li>
 </ul>
 
@@ -114,6 +114,7 @@
 <h2>변경 이력</h2>
 <ul class="dim">
   <li>2026-10-02 처음 게시</li>
+  <li>2026-10-02 준비 페이지 [게시 확인] 추가에 따라 3장·6장·7장 수정</li>
 </ul>
 
 <hr>
@@ -137,7 +138,7 @@
   <li>Car names and VINs — on the watch, used to address your car</li>
   <li>Car status (lock, battery, range, cabin temperature) — on the watch, for display</li>
   <li>Watch key — a signing key created on the watch that you pair to your car with its key card</li>
-  <li>Connection data when you open the setup or helper page — GitHub (section 6)</li>
+  <li>Connection data when you open the setup or helper page, or tap [Check] on the setup page — GitHub (section 6)</li>
 </ul>
 
 <h2>4. Retention and deletion</h2>
@@ -152,7 +153,7 @@
   <tr><td>Company</td><td>GitHub, Inc. (USA) — 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, Data Protection Officer dpo@github.com</td></tr>
   <tr><td>What it provides</td><td>Static hosting of the setup and helper pages and this notice (GitHub Pages, <code>wristcommand-key.github.io/own/</code>)</td></tr>
   <tr><td>Data GitHub processes</td><td>Connection data when you open a page (IP address, request time, browser information, etc.). Values you type on the pages are not sent to GitHub</td></tr>
-  <tr><td>Where, when, how</td><td>The USA and other countries where GitHub operates · when you open the setup or helper page · encrypted connection (HTTPS)</td></tr>
+  <tr><td>Where, when, how</td><td>The USA and other countries where GitHub operates · when you open the setup or helper page, or tap [Check] on the setup page · encrypted connection (HTTPS)</td></tr>
   <tr><td>Use and retention</td><td>Serving the pages, security and operation. Retention follows GitHub's privacy statement; the developer does not receive or keep this data</td></tr>
   <tr><td>How to avoid it and the effect</td><td>Do not open the pages or do not give personal-data consent. Your developer account then cannot be connected and the app works over Bluetooth only</td></tr>
 </table>
@@ -163,7 +164,7 @@
 <ul>
   <li>All internet traffic is encrypted (HTTPS).</li>
   <li>Your developer account secret stays in the watch app's storage only, never in Garmin Connect settings, on screen or in logs.</li>
-  <li>The setup and helper pages are static pages that block all network requests. The one line contains your secret, so the page asks you to clear your clipboard (including any keyboard clipboard history) afterwards.</li>
+  <li>The helper page is a static page that blocks all network requests. The setup page blocks them too, except that tapping [Check] in card 7 reads your own public key address (username.github.io) once; nothing you typed is sent. The one line contains your secret, so the page asks you to clear your clipboard (including any keyboard clipboard history) afterwards.</li>
   <li>Tokens stay in the watch app's storage and are never shown on screen or written to logs.</li>
 </ul>
 
@@ -205,9 +206,10 @@
 <h2>Change history</h2>
 <ul class="dim">
   <li>2026-10-02 first published</li>
+  <li>2026-10-02 sections 3, 6 and 7 updated for the new [Check] button on the setup page</li>
 </ul>
 
 </main>
 </body>
 </html>
-<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​‌​​‌‌​​​​​​‌‌​​​​​​‌‌​​‌​​​‌‌​​​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​‌‌‌​​‌‌‌​‌​​​‌‌​‌​‌​​‌‌​​‌‌​‌‌​​​‌‌​​‌‌​‌‌​​‌‌​​​‌‌​‌‌​​​‌​​‌‌​​​‌​​​‌‌​​​​​‌‌​​​‌‌​‌‌​​‌​‌​​‌‌​‌‌‌​‌‌​​​‌‌​​‌‌​​‌‌​​‌‌​‌‌​​‌‌​​‌‌​​​‌‌​‌‌​​​‌‌‌​‌​​​‌‌​‌‌​​​‌‌‌​​​​​‌‌​​‌‌​​‌‌​‌‌‌​​‌‌​‌​​​​‌‌​​‌‌​​‌‌​‌‌‌​‌‌​​​‌​​​‌‌‌​​‌​​‌‌​‌‌‌​​‌‌‌​​​​​‌‌​​​‌​​‌‌​‌‌‌​​‌‌​​​​​‌‌​​​​‌​​‌‌​‌​‌ -->
+<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​‌​​‌‌​​​​​​‌‌​​​​​​‌‌​​‌​​​‌‌​​​‌​​‌‌​‌​​​​‌‌​​​‌​​‌‌​‌‌​​​‌‌‌​‌​​​‌‌​‌​‌​‌‌​​‌​​​​‌‌​‌‌​​​‌‌‌​​​​​‌‌​​‌‌​​‌‌​‌​​​‌‌​​​‌‌​​‌‌‌​​​​​‌‌​‌​‌​‌‌​​​‌‌​​‌‌​​​​​‌‌​​‌‌​​‌‌​​​‌​​​‌‌​​‌​​​‌‌​‌​​​‌‌​​‌​‌​​‌‌‌​‌​​​‌‌​‌‌​​​‌‌​‌‌​​‌‌​​‌​​​​‌‌‌​​‌​‌‌​​​​‌​​‌‌​‌​‌​‌‌​​‌​​​​‌‌​‌‌‌​‌‌​​​​‌​​‌‌​‌​​​​‌‌​​​​​‌‌​​​‌‌​‌‌​​​​‌​‌‌​​‌​‌​​‌‌​​​​​‌‌​​‌​‌ -->
