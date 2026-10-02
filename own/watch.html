@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>WristCommand LTE</title>
+<!-- WristCommand LTE 시계 도우미(2026-09-26). 시계가 makeOAuthRequest 로 가민 커넥트 안에 띄운다(관문 1과 같은 흐름, 9/24 실기 통과).
+     주소 = wristcommand-key.github.io/own/watch.html(store/TkOwn.HELPER 와 같아야 한다). -->
+<!--
+     ★인터넷으로 아무것도 보내지 않는다. 붙여넣은 「한 줄」을 풀어 localhost 복귀 주소(가민 앱이 가로채 시계로 넘김)로만 넘긴다.
+     ★「한 줄」 형식은 index.html 과 같다: WC1.<base64url(JSON {c,s,d})>.<FNV-1a 8자리>. 검사값이 안 맞으면 잘린 붙여넣기다.
+     ★넘기는 이름: c·s·dom·state·js(=1). 취소하면 err=cancel. 시계(store/TkOwn)가 state 를 대조한다. -->
+<style>
+  :root { --bg:#ffffff; --fg:#1a1a1a; --dim:#5a5a5a; --box:#f4f4f4; --ok:#0a7a2f; --bad:#b3261e; --btn:#1b5fd6; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#121212; --fg:#ececec; --dim:#a8a8a8; --box:#1e1e1e; --ok:#5cd67f; --bad:#ff8a80; --btn:#4d8dff; } }
+  body { background:var(--bg); color:var(--fg); font:17px/1.55 -apple-system, "Apple SD Gothic Neo", "Segoe UI", sans-serif; margin:0; padding:20px 16px 40px; }
+  h1 { font-size:20px; margin:0 0 8px; }
+  .dim { color:var(--dim); font-size:14px; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); }
+  textarea { width:100%; box-sizing:border-box; height:110px; font:14px ui-monospace, Menlo, monospace; padding:10px; border:1px solid var(--dim); border-radius:8px; background:var(--box); color:var(--fg); }
+  button { display:block; width:100%; margin:12px 0 4px; padding:14px; font:inherit; font-weight:700; color:#fff; background:var(--btn); border:0; border-radius:10px; }
+  button.plain { background:transparent; color:var(--dim); font-weight:400; }
+  button:disabled { opacity:0.45; }
+  body[data-l="en"] .ko { display:none; } body[data-l="ko"] .en { display:none; }
+</style>
+</head>
+<body data-l="ko">
+<h1><span class="ko">내 개발자 계정 연결</span><span class="en">Connect my developer account</span></h1>
+<p class="ko">준비 페이지에서 복사한 <b>한 줄</b>을 아래 칸에 붙여넣으세요.</p>
+<p class="en">Paste the <b>one line</b> you copied on the setup page.</p>
+<textarea id="line" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
+<p id="msg" class="dim"></p>
+<button id="send" type="button" disabled><span class="ko">시계로 보내기</span><span class="en">Send to watch</span></button>
+<button id="cancel" class="plain" type="button"><span class="ko">취소</span><span class="en">Cancel</span></button>
+<p class="dim ko">이 화면은 인터넷으로 아무것도 보내지 않습니다. 한 줄은 이 앱(가민 커넥트)이 받아 시계로 넘깁니다. 보낸 뒤 곧 오는 두 번째 알림에서 차 계정으로 로그인하세요.</p>
+<p class="dim en">This screen sends nothing over the internet; this app (Garmin Connect) hands the line to your watch. After sending, sign in with your car account from the second notification.</p>
+
+<script>
+(function () {
+  var RD = "http://localhost:8080/callback";
+  var BLOCK = ["wristcommand-key.github.io", "salgi-bot.github.io"];
+  function $(id) { return document.getElementById(id); }
+  var q = new URLSearchParams(location.search);
+  var state = q.get("state") || "";
+  var L = q.get("lang") || ((navigator.language || "").toLowerCase().indexOf("ko") === 0 ? "ko" : "en");
+  L = L === "ko" ? "ko" : "en";
+  document.body.setAttribute("data-l", L); document.documentElement.lang = L;
+  function t(ko, en) { return L === "ko" ? ko : en; }
+
+  function fnv(s) { var h = 0x811c9dc5; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ("0000000" + h.toString(16)).slice(-8); }
+  function unb64url(s) { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) { s += "="; } return decodeURIComponent(escape(atob(s))); }
+
+  var parsed = null;
+  function check() {
+    parsed = null;
+    var v = $("line").value.replace(/\s+/g, "");
+    var err = "";
+    if (!v) { $("msg").textContent = ""; $("send").disabled = true; return; }
+    var p = v.split(".");
+    if (p.length !== 3 || p[0] !== "WC1") { err = t("한 줄 모양이 아닙니다. 준비 페이지의 [한 줄로 복사]로 다시 복사하세요.", "Not a WristCommand line. Copy it again with [Copy as one line]."); }
+    else if (fnv(p[1]) !== p[2]) { err = t("글자가 잘리거나 바뀌었습니다. 다시 복사해 붙여넣으세요.", "The line was cut or changed. Copy and paste it again."); }
+    else {
+      try {
+        var o = JSON.parse(unb64url(p[1]));
+        var d = String(o.d || "");
+        if (!o.c || !o.s || !d) { err = t("값이 빠졌습니다.", "Something is missing."); }
+        else if (d.indexOf("tesla") >= 0 || BLOCK.indexOf(d) >= 0) { err = t("이 주소는 쓸 수 없습니다.", "This address cannot be used."); }
+        else { parsed = { c: String(o.c), s: String(o.s), d: d }; }
+      } catch (e) { err = t("한 줄을 풀지 못했습니다.", "Could not read the line."); }
+    }
+    if (parsed) {
+      $("msg").textContent = "Client ID " + parsed.c.slice(0, 8) + "… · https://" + parsed.d;
+      $("msg").className = "ok";
+    } else { $("msg").textContent = err; $("msg").className = "bad"; }
+    $("send").disabled = !parsed || !state;
+    if (parsed && !state) { $("msg").textContent = t("시계에서 연 화면이 아닙니다. 시계의 「내 개발자 계정」으로 여세요.", "Open this from “My developer account” on the watch."); $("msg").className = "bad"; }
+  }
+  $("line").addEventListener("input", check);
+  $("line").addEventListener("paste", function () { setTimeout(check, 0); });
+
+  var sent = false;
+  function go(p) {
+    if (sent) { return; }
+    sent = true;
+    $("send").disabled = true; $("cancel").disabled = true;
+    var parts = [];
+    for (var k in p) { parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(p[k])); }
+    location.href = RD + "?" + parts.join("&");
+  }
+  $("send").addEventListener("click", function () {
+    if (!parsed) { return; }
+    $("send").textContent = t("보냈습니다 — 시계를 보세요", "Sent — check your watch");
+    go({ c: parsed.c, s: parsed.s, dom: parsed.d, state: state, js: "1" });
+  });
+  $("cancel").addEventListener("click", function () { go({ err: "cancel", state: state, js: "1" }); });
+})();
+</script>
+</body>
+</html>
+<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​‌​​‌‌​​​​​​‌‌​​​​​​‌‌​​‌​​​‌‌​​​‌​​‌‌​​​​​​‌‌​‌​‌​​‌‌‌​​‌​​‌‌‌​‌​​​‌‌​​‌‌​‌‌​​‌‌​​​‌‌​‌​‌​​‌‌​‌‌‌​​‌‌​‌​​​​‌‌​​‌​​​‌‌​​​‌​​‌‌​​‌‌​​‌‌​‌‌​​​‌‌​‌​‌​‌‌​​​‌‌​‌‌​​​‌​​​‌‌​‌‌​​‌‌​​​‌​​​‌‌​​​‌​​‌‌​‌‌​​​‌‌‌​‌​​​‌‌​‌‌‌​​‌‌​‌‌‌​​‌‌‌​​​​‌‌​​‌‌​​​‌‌​​​​​​‌‌​​​‌​​‌‌​​‌‌​​‌‌​​​‌​​‌‌​‌​​​‌‌​​‌​​​​‌‌‌​​​​​‌‌​​‌‌​‌‌​​​‌‌​‌‌​​‌​​​‌‌​​​‌‌​​‌‌​‌‌‌ -->

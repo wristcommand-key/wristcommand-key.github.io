@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>WristCommand LTE 준비 · Setup</title>
+<!-- WristCommand LTE(개인 계정 전용판) 준비 페이지 — 화면마다 [열기]·설명·[복사] 카드.
+     ★화면 글자 근거: GitHub = docs.github.com 원문(새 저장소 URL 쿼리 name·visibility·owner=@me / Add file → Create new file →
+       Commit changes... → Commit changes / Settings → Pages → Build and deployment → Source → Deploy from a branch → Save /
+       게시 반영 최대 10분). 차 제조사 개발자 사이트 = 2026-10-02 크롬 읽기 확인(저장소 ref/261002_tesla_dev_screens.md).
+       확인 못 한 글자(README 선택 칸 이름 등)는 위치·뜻으로만 쓴다.
+     ★이 페이지는 인터넷으로 아무것도 보내지 않는다(CSP connect-src 'none', 폼 전송 없음, 자동 확인 fetch 없음). 링크는 모두 새 탭
+       (target=_blank) — 같은 탭으로 넘어가면 만든 공개키·붙여넣은 값이 사라진다. 저장은 GitHub 아이디만(localStorage), Secret 은 저장 안 함.
+     ★「한 줄」 형식은 watch.html 과 같아야 한다: WC1.<base64url(JSON {c,s,d})>.<FNV-1a 32비트 16진 8자리(가운데 부분)>
+     ★막는 주소: 공용 앱 주소(wristcommand-key.github.io)·개발자 개인판 주소(salgi-bot.github.io)·제조사 이름이 든 주소.
+     ★제목ㆍ머리말에 제조사 이름을 쓰지 않는다(개발자 약관 상표 조항). 피할 수 없는 것 = 개발자 사이트 주소ㆍ공개키 파일 경로ㆍ권한 이름.
+     ★noindex — 앱이 스토어에 나오기 전에 검색으로 들어와 준비부터 하는 일을 막는다. -->
+<style>
+  :root { --bg:#ffffff; --fg:#1a1a1a; --dim:#5a5a5a; --line:#e3e3e3; --box:#f4f4f4; --card:#fafafa; --ok:#0a7a2f; --bad:#b3261e; --btn:#1b5fd6; --go:#0a7a2f; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#121212; --fg:#ececec; --dim:#a8a8a8; --line:#2c2c2c; --box:#1e1e1e; --card:#181818; --ok:#5cd67f; --bad:#ff8a80; --btn:#4d8dff; --go:#3fbf6a; } }
+  body { background:var(--bg); color:var(--fg); font:16px/1.65 -apple-system, "Apple SD Gothic Neo", "Segoe UI", sans-serif; margin:0; padding:24px 16px 48px; }
+  main { max-width:720px; margin:0 auto; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  h2 { font-size:17px; margin:0 0 8px; }
+  .card { border:1px solid var(--line); background:var(--card); border-radius:12px; padding:14px 14px 10px; margin:16px 0; }
+  .card .num { display:inline-block; min-width:26px; height:26px; line-height:26px; text-align:center; border-radius:13px; background:var(--btn); color:#fff; font-size:14px; margin-right:6px; }
+  p, li { margin:6px 0; }
+  ol, ul { padding-left:22px; }
+  .dim { color:var(--dim); font-size:14px; }
+  .ok { color:var(--ok); } .bad { color:var(--bad); }
+  code { font-size:14px; word-break:break-all; background:var(--box); padding:1px 4px; border-radius:4px; }
+  .scr { font-weight:700; }
+  label { display:block; margin:12px 0 4px; font-weight:600; }
+  input, textarea { width:100%; box-sizing:border-box; font:14px ui-monospace, Menlo, monospace; padding:10px; border:1px solid var(--dim); border-radius:8px; background:var(--box); color:var(--fg); }
+  textarea { height:120px; }
+  button { font:inherit; font-weight:700; color:#fff; background:var(--btn); border:0; border-radius:10px; padding:12px 14px; margin:8px 0; }
+  button.wide, a.go { display:block; width:100%; box-sizing:border-box; }
+  button.small { padding:4px 10px; font-size:14px; margin:0 0 0 6px; }
+  button:disabled { opacity:0.45; }
+  a.go { font-weight:700; color:#fff; background:var(--go); border-radius:10px; padding:12px 14px; margin:8px 0; text-align:center; text-decoration:none; }
+  a.go.off { opacity:0.45; pointer-events:none; }
+  .row { display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin:8px 0; }
+  .row .k { flex:0 0 100%; font-size:14px; color:var(--dim); }
+  .row code { flex:1 1 auto; }
+  .warn { border-left:4px solid var(--bad); padding:4px 10px; background:var(--box); }
+  body[data-l="en"] .ko { display:none; } body[data-l="ko"] .en { display:none; }
+  a { color:var(--btn); }
+</style>
+</head>
+<body data-l="ko">
+<main>
+
+<p class="dim"><a href="#" id="lang">English</a></p>
+
+<h1><span class="ko">WristCommand LTE 준비</span><span class="en">WristCommand LTE setup</span></h1>
+<p class="dim ko">WristCommand LTE는 <b>본인 개발자 계정의 무료 사용량</b>으로 인터넷(폰 경유) 명령을 쓰는 앱입니다. 처음 한 번 약 30분 준비가 필요하고(개발자 앱 승인 대기는 빼고), 폰만으로 할 수 있습니다. 아래 카드를 위에서부터 하나씩 하세요. 초록 단추 <b>[열기]</b>는 그 화면을 <b>새 탭</b>으로 엽니다 — 이 페이지는 닫지 말고 탭만 오가세요. 파란 <b>[복사]</b>를 누른 뒤 그 화면의 칸에 붙여넣으면 됩니다.</p>
+<p class="dim en">WristCommand LTE uses <b>your own developer account's free usage</b> for remote (phone) commands. The one-time setup takes about 30 minutes plus the wait for developer app approval, and can be done on a phone. Go through the cards from the top. Green <b>[Open]</b> opens that screen in a <b>new tab</b> — keep this page open and switch tabs. Tap blue <b>[Copy]</b>, then paste into the field on that screen.</p>
+<p class="warn ko">이 페이지는 인터넷으로 아무것도 보내지 않습니다. 입력한 값은 이 화면과 클립보드에만 있습니다(GitHub 아이디만 이 폰에 기억). <b>개발자 계정에 결제수단은 넣지 마세요</b> — 이 앱은 무료 사용량 안에서만 쓰도록 만들었고, 무료 사용량을 다 쓰면 그달 남은 기간은 블루투스로만 씁니다.</p>
+<p class="warn en">This page sends nothing over the internet. What you type stays on this screen and in your clipboard (only your GitHub username is remembered on this phone). <b>Do not add a payment method</b> to the developer account; the app is built to stay within the free usage, and once that runs out it uses Bluetooth for the rest of the month.</p>
+
+<!-- 1 -->
+<div class="card">
+<h2><span class="num">1</span><span class="ko">차 계정 2단계 인증 켜기</span><span class="en">Turn on two-factor authentication on your car account</span></h2>
+<p class="ko">개발자 사이트 가입 조건입니다(이메일 인증 + 2단계 인증). 차 계정의 보안 설정에서 켭니다. 이미 켜져 있으면 넘어가세요.</p>
+<p class="en">The developer program requires a verified email and multi-factor authentication. Turn it on in your car account's security settings. Skip if already on.</p>
+</div>
+
+<!-- 2 -->
+<div class="card">
+<h2><span class="num">2</span><span class="ko">GitHub 계정 (무료)</span><span class="en">GitHub account (free)</span></h2>
+<p class="ko">공개키 파일을 올려 둘 내 웹 주소를 GitHub에 무료로 만듭니다. GitHub 계정이 이미 있으면 그 계정을 쓰세요(무료 계정은 한 사람에 하나). 없으면 [열기]로 가입합니다. <b>아이디에 차 제조사 이름(영문)을 넣지 마세요</b> — 그런 주소는 등록되지 않습니다.</p>
+<p class="en">You make a free web address on GitHub to hold your public key file. Use your existing GitHub account if you have one (one free account per person); otherwise sign up with [Open]. <b>Do not put the car maker's name in your username</b>; such addresses are not accepted.</p>
+<a class="go" href="https://github.com/signup" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · GitHub 가입</span><span class="en">Open · GitHub sign-up</span></a>
+<label for="gh"><span class="ko">내 GitHub 아이디 (또는 이미 가진 내 도메인)</span><span class="en">Your GitHub username (or a domain you already own)</span></label>
+<input id="gh" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="my-id">
+<p id="ghmsg" class="dim"></p>
+<p class="dim ko">아이디를 넣으면 아래 카드의 [열기]·[복사]가 내 주소로 바뀝니다.</p>
+<p class="dim en">Once you enter it, the [Open] and [Copy] buttons below use your address.</p>
+</div>
+
+<!-- 3 -->
+<div class="card gh-only">
+<h2><span class="num">3</span><span class="ko">저장소 만들기</span><span class="en">Create the repository</span></h2>
+<a class="go need-gh" id="go-new" href="#" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · 새 저장소 (이름 채워짐)</span><span class="en">Open · New repository (name filled in)</span></a>
+<ol>
+  <li class="ko">열린 화면에서 저장소 이름 칸에 <code class="v-repo">아이디.github.io</code>가 들어 있는지 봅니다. 비어 있으면 <button class="small" data-copy="repo" type="button">복사</button> 해서 붙여넣으세요.</li>
+  <li class="en">On the screen that opens, check the repository name is <code class="v-repo">username.github.io</code>. If it is empty, <button class="small" data-copy="repo" type="button">Copy</button> and paste it.</li>
+  <li class="ko">공개 범위가 <span class="scr">Public</span>인지 봅니다(이미 골라져 있습니다).</li>
+  <li class="en">Make sure visibility is <span class="scr">Public</span> (already selected).</li>
+  <li class="ko"><b>README를 추가하는 선택을 켭니다.</b></li>
+  <li class="en"><b>Turn on the option to add a README.</b></li>
+  <li class="ko">아래쪽 <span class="scr">Create repository</span>를 누릅니다. (이 이름의 저장소가 이미 있다고 나오면 그 저장소를 그대로 씁니다.)</li>
+  <li class="en">Tap <span class="scr">Create repository</span> at the bottom. (If a repository with this name already exists, just use it.)</li>
+</ol>
+</div>
+
+<!-- 4 -->
+<div class="card">
+<h2><span class="num">4</span><span class="ko">공개키 만들기 (이 페이지에서)</span><span class="en">Make the public key (on this page)</span></h2>
+<button id="mk" class="wide" type="button"><span class="ko">공개키 파일 만들기</span><span class="en">Make public key file</span></button>
+<textarea id="pem" readonly placeholder="-----BEGIN PUBLIC KEY-----"></textarea>
+<p class="dim ko">비밀 키는 이 브라우저 안에서만 잠깐 생겼다가 페이지를 닫으면 사라지고, 꺼낼 수도 없습니다. 시계는 이 키를 쓰지 않습니다(명령은 시계 키로 서명합니다). 주소마다 다른 키가 필요해서 만드는 것입니다. 다음 카드를 마치기 전에 이 페이지를 닫으면 다시 만드세요.</p>
+<p class="dim en">The private half exists only inside this browser, cannot be exported, and is gone when you close the page. The watch never uses it (commands are signed with the watch key); every address just needs its own key. If you close this page before finishing the next card, make it again.</p>
+</div>
+
+<!-- 5 -->
+<div class="card gh-only">
+<h2><span class="num">5</span><span class="ko">공개키 파일 올리기</span><span class="en">Upload the public key file</span></h2>
+<a class="go need-gh" id="go-repo" href="#" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · 내 저장소</span><span class="en">Open · My repository</span></a>
+<ol>
+  <li class="ko">파일 목록 위의 <span class="scr">Add file</span> 메뉴 → <span class="scr">Create new file</span>.</li>
+  <li class="en">Above the file list: <span class="scr">Add file</span> menu → <span class="scr">Create new file</span>.</li>
+  <li class="ko">파일 이름 칸에 붙여넣기: <code>.well-known/appspecific/com.tesla.3p.public-key.pem</code> <button class="small" data-copy="path" type="button">복사</button> (빗금 「/」에서 폴더가 자동으로 나뉩니다.)</li>
+  <li class="en">Paste into the file name field: <code>.well-known/appspecific/com.tesla.3p.public-key.pem</code> <button class="small" data-copy="path" type="button">Copy</button> (the slashes create the folders).</li>
+  <li class="ko">내용 칸에 4번에서 만든 공개키 붙여넣기 <button class="small" data-copy="pem" type="button">복사</button>.</li>
+  <li class="en">Paste the public key from card 4 into the content box <button class="small" data-copy="pem" type="button">Copy</button>.</li>
+  <li class="ko"><span class="scr">Commit changes...</span> → 뜨는 창에서 현재 가지(main)에 바로 올리는 선택 그대로 두고 <span class="scr">Commit changes</span>.</li>
+  <li class="en"><span class="scr">Commit changes...</span> → in the dialog, keep committing directly to the current branch (main) → <span class="scr">Commit changes</span>.</li>
+</ol>
+</div>
+
+<!-- 6 -->
+<div class="card gh-only">
+<h2><span class="num">6</span><span class="ko">점 폴더 보이게 하기 (<code>.nojekyll</code>)</span><span class="en">Let the dot-folder be served (<code>.nojekyll</code>)</span></h2>
+<a class="go need-gh" id="go-repo2" href="#" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · 내 저장소</span><span class="en">Open · My repository</span></a>
+<ol>
+  <li class="ko">다시 <span class="scr">Add file</span> → <span class="scr">Create new file</span> → 파일 이름 <code>.nojekyll</code> <button class="small" data-copy="noj" type="button">복사</button> → 내용은 비워 두고 <span class="scr">Commit changes...</span> → <span class="scr">Commit changes</span>.</li>
+  <li class="en">Again <span class="scr">Add file</span> → <span class="scr">Create new file</span> → file name <code>.nojekyll</code> <button class="small" data-copy="noj" type="button">Copy</button> → leave the content empty → <span class="scr">Commit changes...</span> → <span class="scr">Commit changes</span>.</li>
+</ol>
+<p class="dim ko">점(.)으로 시작하는 폴더를 웹에 보이게 하는 빈 파일입니다. <b>이미 이 저장소로 블로그 같은 사이트를 쓰고 있다면</b> <code>.nojekyll</code> 대신 <code>_config.yml</code> 에 <code>include: [".well-known"]</code> <button class="small" data-copy="inc" type="button">복사</button> 한 줄을 더하세요 — <code>.nojekyll</code> 을 넣으면 그 사이트가 꺼질 수 있습니다.</p>
+<p class="dim en">An empty file that lets folders starting with a dot be served. <b>If this repository already hosts a site</b> (e.g. a blog), add the line <code>include: [".well-known"]</code> <button class="small" data-copy="inc" type="button">Copy</button> to <code>_config.yml</code> instead; <code>.nojekyll</code> could switch that site off.</p>
+</div>
+
+<!-- 7 -->
+<div class="card gh-only">
+<h2><span class="num">7</span><span class="ko">웹 게시 켜기·확인</span><span class="en">Turn on and check publishing</span></h2>
+<a class="go need-gh" id="go-repo3" href="#" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · 내 저장소</span><span class="en">Open · My repository</span></a>
+<ol>
+  <li class="ko">저장소 이름 아래 <span class="scr">Settings</span> (안 보이면 메뉴 「…」 안) → 왼쪽 목록의 <span class="scr">Pages</span>.</li>
+  <li class="en">Under the repository name: <span class="scr">Settings</span> (inside the “…” menu if hidden) → <span class="scr">Pages</span> in the sidebar.</li>
+  <li class="ko"><span class="scr">Build and deployment</span>의 <span class="scr">Source</span>가 <span class="scr">Deploy from a branch</span>이고 가지가 <code>main</code>, 폴더가 <code>/ (root)</code>인지 봅니다. 아니면 그렇게 고르고 <span class="scr">Save</span>.</li>
+  <li class="en">Under <span class="scr">Build and deployment</span>, make sure <span class="scr">Source</span> is <span class="scr">Deploy from a branch</span>, branch <code>main</code>, folder <code>/ (root)</code>. If not, pick them and tap <span class="scr">Save</span>.</li>
+  <li class="ko">몇 분(최대 10분) 뒤 아래 [열기]를 눌러 「BEGIN PUBLIC KEY」 글자가 보이면 됩니다. 안 보이면 잠시 뒤 다시 여세요.</li>
+  <li class="en">After a few minutes (up to 10), tap [Open] below; you should see “BEGIN PUBLIC KEY”. If not, try again a little later.</li>
+</ol>
+<a class="go need-dom" id="go-pem" href="#" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · 내 공개키 주소 확인</span><span class="en">Open · Check my key address</span></a>
+</div>
+<p class="dim" id="owndom-note" hidden><span class="ko">내 도메인을 쓰는 경우 3·5·6·7 카드 대신, 그 사이트의 같은 경로(<code>/.well-known/appspecific/com.tesla.3p.public-key.pem</code>)에 4번 공개키를 올리고 아래 [열기]로 확인하세요.</span><span class="en">If you use your own domain, skip cards 3, 5, 6 and 7: put the key from card 4 at the same path (<code>/.well-known/appspecific/com.tesla.3p.public-key.pem</code>) on that site and check it with [Open] below.</span></p>
+
+<!-- 8 -->
+<div class="card">
+<h2><span class="num">8</span><span class="ko">개발자 앱 만들기</span><span class="en">Create a developer app</span></h2>
+<p class="ko">차 제조사 개발자 사이트에 <b>차 계정</b>으로 로그인해 앱을 만듭니다. 처음이면 본인 정보(이름 등)를 묻는 칸이 먼저 나올 수 있는데, 그 칸은 직접 입력하세요. 아래 값은 [복사]해서 넣습니다. 화면 글자는 「한국어」(영어)로 적었습니다.</p>
+<p class="en">Sign in to the car maker's developer site with your <b>car account</b> and create an application. First-timers may be asked for personal details (name etc.) first; type those yourself. Copy the values below.</p>
+<a class="go" href="https://developer.tesla.com/request" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · 새 앱 만들기 화면</span><span class="en">Open · New application form</span></a>
+<p class="dim ko">바로 열리지 않으면 <a href="https://developer.tesla.com/dashboard" target="_blank" rel="noopener noreferrer">앱 목록</a>의 「새 애플리케이션 만들기」(Create New Application)를 누르세요.</p>
+<p class="dim en">If it doesn't open, use <span class="scr">Create New Application</span> on the <a href="https://developer.tesla.com/dashboard" target="_blank" rel="noopener noreferrer">application list</a>.</p>
+
+<p><b class="ko">① 「애플리케이션 세부 정보」 단계</b><b class="en">① Application details step</b></p>
+<div class="row"><span class="k"><span class="ko">「애플리케이션 이름」 (Application Name)</span><span class="en">Application Name</span></span><code id="v-name"></code> <button class="small" data-copy="name" type="button">⧉</button></div>
+<div class="row"><span class="k"><span class="ko">「애플리케이션 설명」 (Application Description, 150자 이내)</span><span class="en">Application Description (max 150)</span></span><code id="v-desc"></code> <button class="small" data-copy="desc" type="button">⧉</button></div>
+<div class="row"><span class="k"><span class="ko">「사용 목적」 (App Purpose of Usage)</span><span class="en">App Purpose of Usage</span></span><code id="v-purp"></code> <button class="small" data-copy="purp" type="button">⧉</button></div>
+<p class="ko">→ 「다음」(Next).</p><p class="en">→ <span class="scr">Next</span>.</p>
+
+<p><b class="ko">② 「고객 세부 정보」(Client Details) 단계</b><b class="en">② Client Details step</b></p>
+<div class="row"><span class="k"><span class="ko">「OAuth 부여 유형」(OAuth Grant Type) — 이것을 고릅니다</span><span class="en">OAuth Grant Type — pick this</span></span><code><span class="ko">인증 코드 및 사물 통신 (Authorization Code and Machine-to-Machine)</span><span class="en">Authorization Code and Machine-to-Machine</span></code></div>
+<p class="dim ko">「사물 통신만 해당(기업에만 권장됨)」은 고르지 마세요.</p><p class="dim en">Do not pick “Machine-to-Machine only”.</p>
+<div class="row"><span class="k"><span class="ko">「허용되는 출처 URL」 (Allowed Origin URL(s))</span><span class="en">Allowed Origin URL(s)</span></span><code class="v-origin">https://아이디.github.io/</code> <button class="small" data-copy="origin" type="button">⧉</button></div>
+<div class="row"><span class="k"><span class="ko">「허용되는 리디렉션 URI」 (Allowed Redirect URI(s))</span><span class="en">Allowed Redirect URI(s)</span></span><code id="v-redir">http://localhost:8080/callback</code> <button class="small" data-copy="redir" type="button">⧉</button></div>
+<p class="dim ko">「허용되는 반환 URL(선택 사항)」은 비워 둡니다. → 「다음」.</p><p class="dim en">Leave “Allowed Returned URL(s) (Optional)” empty. → <span class="scr">Next</span>.</p>
+
+<p><b class="ko">③ 「API 및 범위」(API &amp; Scopes) 단계</b><b class="en">③ API &amp; Scopes step</b></p>
+<p class="ko">「법인 차량 API」(Fleet API) 아래에서 <b>세 개만</b> 고릅니다: 「차량 정보」(Vehicle Information) · 「차량 명령」(Vehicle Commands) · 「차량 충전 관리」(Vehicle Charging Management). 위치 권한은 필요 없습니다.</p>
+<p class="en">Under <span class="scr">Fleet API</span>, pick <b>only these three</b>: <span class="scr">Vehicle Information</span> · <span class="scr">Vehicle Commands</span> · <span class="scr">Vehicle Charging Management</span>. No location access is needed.</p>
+<p class="ko">→ 단계 끝의 단추(「제출하기」 또는 「다음」).</p><p class="en">→ the button at the end of the step (<span class="scr">Submit</span> or <span class="scr">Next</span>).</p>
+
+<p><b class="ko">④ 「청구 세부 정보(선택 사항)」 화면이 나오면</b><b class="en">④ If the billing details screen appears</b></p>
+<p class="ko"><b>결제수단을 넣지 말고</b> 「건너뛰고 제출하기」(Skip and Submit). 결제수단이 없으면 청구 한도가 0으로 정해집니다(사이트 안내 원문).</p>
+<p class="en"><b>Do not add a payment method</b>; tap <span class="scr">Skip and Submit</span>. Without one, the billing limit is set to 0 (as the site says).</p>
+<p class="dim ko">앱 이름에 차 제조사 이름을 넣지 마세요(위 값은 이미 지켜져 있습니다). 제출 뒤 승인 메일을 기다립니다 — 몇 분에서 몇 시간 걸릴 수 있습니다.</p>
+<p class="dim en">Do not put the car maker's name in the app name (the value above already avoids it). After submitting, wait for the approval email — minutes to a few hours.</p>
+</div>
+
+<!-- 9 -->
+<div class="card">
+<h2><span class="num">9</span><span class="ko">Client ID·Client Secret 가져오기 (승인 뒤)</span><span class="en">Get the Client ID and Client Secret (after approval)</span></h2>
+<a class="go" href="https://developer.tesla.com/dashboard" target="_blank" rel="noopener noreferrer"><span class="ko">열기 · 내 앱 목록</span><span class="en">Open · My applications</span></a>
+<ol>
+  <li class="ko">「개발자 애플리케이션」(Developer Applications) 화면에서 내 앱의 「세부내역 확인」(View Details).</li>
+  <li class="en">On <span class="scr">Developer Applications</span>, tap <span class="scr">View Details</span> on your app.</li>
+  <li class="ko">「자격 증명 및 API」(Credentials &amp; APIs) 탭의 「OAuth 2.0 고객 ID」(OAuth 2.0 Client ID) 칸을 봅니다.</li>
+  <li class="en">Open the <span class="scr">Credentials &amp; APIs</span> tab and find <span class="scr">OAuth 2.0 Client ID</span>.</li>
+  <li class="ko">「고객 ID」(Client ID) 옆 <b>복사 아이콘(겹친 네모)</b>을 누르고 → 이 페이지로 돌아와 아래 첫 칸에 붙여넣기.</li>
+  <li class="en">Tap the <b>copy icon (two squares)</b> next to <span class="scr">Client ID</span> → come back here and paste into the first box below.</li>
+  <li class="ko">「고객 비밀번호」(Client Secret) 옆 <b>눈 아이콘</b>을 눌러 값을 보이게 한 뒤, 그 값을 길게 눌러 전부 선택·복사 → 아래 둘째 칸에 붙여넣기.</li>
+  <li class="en">Tap the <b>eye icon</b> next to <span class="scr">Client Secret</span> to show it, long-press to select all and copy → paste into the second box below.</li>
+</ol>
+<label for="cid">Client ID <span class="ko">(고객 ID)</span></label>
+<input id="cid" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
+<label for="sec">Client Secret <span class="ko">(고객 비밀번호)</span></label>
+<input id="sec" type="password" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
+<p class="dim ko">Client Secret은 남에게 보여 주거나 메신저로 보내지 마세요. 이 페이지는 저장하지 않습니다.</p>
+<p class="dim en">Never show or message the Client Secret to anyone. This page does not store it.</p>
+</div>
+
+<!-- 10 -->
+<div class="card">
+<h2><span class="num">10</span><span class="ko">한 줄로 묶어 복사</span><span class="en">Bundle into one line and copy</span></h2>
+<p class="ko">Client ID·Client Secret·내 주소를 시계가 받을 수 있는 한 줄로 묶습니다.</p>
+<p class="en">This bundles the Client ID, Client Secret and your address into one line the watch can take.</p>
+<p id="bmsg" class="dim"></p>
+<button id="bundle" class="wide" type="button"><span class="ko">한 줄로 복사</span><span class="en">Copy as one line</span></button>
+</div>
+
+<!-- 11 -->
+<div class="card">
+<h2><span class="num">11</span><span class="ko">시계로 보내기</span><span class="en">Send to the watch</span></h2>
+<ol>
+  <li class="ko">시계에서 WristCommand LTE를 열고 <b>내 개발자 계정</b>을 누릅니다(차가 없으면 첫 화면, 있으면 「설정·더보기」 안). 개인정보 동의 뒤 폰 알림을 누릅니다.</li>
+  <li class="en">On the watch open WristCommand LTE and select <b>My developer account</b> (first screen if no car yet, otherwise in Settings &amp; more). After the personal-data consent, tap the phone notification.</li>
+  <li class="ko">열린 화면 칸에 <b>붙여넣기</b> → [시계로 보내기]. 시계가 주소를 등록합니다(몇 초).</li>
+  <li class="en"><b>Paste</b> into the box that opens → [Send to watch]. The watch registers your address (a few seconds).</li>
+  <li class="ko">곧 오는 <b>두 번째 알림</b> → 차 계정으로 로그인 → 권한을 <b>전부</b> 허용 → 시계에 차 이름이 뜨면 끝입니다.</li>
+  <li class="en">Tap the <b>second notification</b> → sign in with your car account → allow <b>all</b> permissions → done when your car name appears on the watch.</li>
+</ol>
+</div>
+
+<!-- 12 -->
+<div class="card">
+<h2><span class="num">12</span><span class="ko">마무리</span><span class="en">Finish</span></h2>
+<p class="ko">[클립보드 비우기]를 누르세요(한 줄에 Client Secret이 들어 있습니다). 키보드의 클립보드 기록이나 다른 기기와 공유되는 클립보드를 쓰신다면 그쪽 기록도 지워 주세요.</p>
+<p class="en">Tap [Clear clipboard]; the line contains your Client Secret. If your keyboard keeps a clipboard history or your clipboard syncs to other devices, clear those too.</p>
+<button id="clear" class="wide" type="button"><span class="ko">클립보드 비우기</span><span class="en">Clear clipboard</span></button>
+<p class="dim ko">블루투스 키(차 옆에서 쓰는 시계 키)는 따로 키카드로 등록합니다. 인터넷 명령도 이 시계 키로 서명하므로 키 등록이 필요합니다. 값을 지우려면 시계의 「내 개발자 계정 지우기」를 누르세요.</p>
+<p class="dim en">The watch key is still registered separately with your key card; remote commands are signed with it too. To delete the values, use “Remove my developer account” on the watch.</p>
+</div>
+
+<p class="dim"><a href="privacy/">개인정보 안내 · Privacy</a> · <a href="terms/">이용 조건 · Terms</a></p>
+
+<textarea id="scratch" readonly style="position:absolute;left:-9999px;height:1px"></textarea>
+
+<script>
+(function () {
+  var BLOCK = ["wristcommand-key.github.io", "salgi-bot.github.io"];
+  var PEM_PATH = ".well-known/appspecific/com.tesla.3p.public-key.pem";
+  var REDIR = "http://localhost:8080/callback";
+  var GH_KEY = "wcLteGh";   // 이 폰에 기억하는 것은 GitHub 아이디뿐(Secret 은 저장 안 함)
+  function $(id) { return document.getElementById(id); }
+
+  // 언어: 폰 언어가 한국어면 한국어, 아니면 영어. ?lang= 로 바꿀 수 있다.
+  var q = new URLSearchParams(location.search);
+  var L = q.get("lang") || ((navigator.language || "").toLowerCase().indexOf("ko") === 0 ? "ko" : "en");
+  function setLang(l) { L = l; document.body.setAttribute("data-l", l); document.documentElement.lang = l; $("lang").textContent = l === "ko" ? "English" : "한국어"; }
+  setLang(L === "ko" ? "ko" : "en");
+  $("lang").addEventListener("click", function (e) { e.preventDefault(); setLang(L === "ko" ? "en" : "ko"); refreshDomain(); });
+  function t(ko, en) { return L === "ko" ? ko : en; }
+
+  // 주소 = GitHub 아이디면 아이디.github.io, 점이 들어 있으면 그대로(이미 가진 도메인)
+  function domainOf(v) {
+    v = (v || "").trim().toLowerCase().replace(/^[a-z]+:\/\//, "").split("/")[0];
+    if (!v) { return ""; }
+    return v.indexOf(".") >= 0 ? v : v + ".github.io";
+  }
+  function domainError(d) {
+    if (!d) { return t("아이디를 넣어 주세요.", "Enter your username."); }
+    if (!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(d)) { return t("주소 모양이 아닙니다.", "Not a valid address."); }
+    if (d.indexOf("tesla") >= 0) { return t("주소에 차 제조사 이름이 들어가면 등록되지 않습니다. 다른 아이디를 쓰세요.", "Addresses containing the car maker's name are not accepted. Use another username."); }
+    if (BLOCK.indexOf(d) >= 0) { return t("이 주소는 쓸 수 없습니다(다른 앱이 쓰는 주소).", "This address is already used by another app."); }
+    return "";
+  }
+
+  // 앱 이름 꼬리 — 같은 이름이 있으면 신청이 자동 거절될 수 있어 무작위 4자를 붙인다
+  var tail = Array.prototype.map.call(crypto.getRandomValues(new Uint8Array(2)), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+  var vals = {
+    name: "WristCommand-" + tail,
+    desc: "Personal use with the WristCommand LTE Garmin watch app to lock, unlock and control my own vehicle.",
+    purp: "Personal, non-commercial use for my own vehicle only. From my Garmin watch (WristCommand LTE app) I lock, unlock, start climate and manage charging, and read the vehicle status. The watch sends the requests through my paired phone straight to the Fleet API with my own credentials; no other server is involved.",
+    redir: REDIR, path: PEM_PATH, noj: ".nojekyll", inc: 'include: [".well-known"]', pem: "", repo: "", origin: ""
+  };
+  $("v-name").textContent = vals.name;
+  $("v-desc").textContent = vals.desc;
+  $("v-purp").textContent = vals.purp;
+
+  function setGo(id, href) {
+    var a = $(id); if (!a) { return; }
+    if (href) { a.href = href; a.className = a.className.replace(/\s*off\b/, ""); }
+    else { a.href = "#"; if (!/\boff\b/.test(a.className)) { a.className += " off"; } }
+  }
+
+  // 허용 주소는 끝에 「/」 — 공용 앱이 포털에서 통과한 형태(https://wristcommand-key.github.io/, 2026-09-24)와 같게
+  function refreshDomain() {
+    var raw = $("gh").value;
+    var d = domainOf(raw);
+    var err = raw ? domainError(d) : "";
+    $("ghmsg").textContent = err || (d ? t("내 주소: https://", "Your address: https://") + d + "/" : "");
+    $("ghmsg").className = err ? "bad" : "dim";
+    vals.repo = d; vals.origin = d ? "https://" + d + "/" : "";
+    var cells = document.querySelectorAll(".v-repo");
+    for (var i = 0; i < cells.length; i++) { cells[i].textContent = d || t("아이디.github.io", "username.github.io"); }
+    cells = document.querySelectorAll(".v-origin");
+    for (i = 0; i < cells.length; i++) { cells[i].textContent = vals.origin || t("https://아이디.github.io/", "https://username.github.io/"); }
+    var ok = d && !err;
+    var gh = ok && /\.github\.io$/.test(d);
+    var user = gh ? d.replace(/\.github\.io$/, "") : "";
+    // 새 저장소 = docs.github.com 「Creating a new repository from a URL query」(name·visibility·owner=@me)
+    setGo("go-new", gh ? "https://github.com/new?name=" + encodeURIComponent(d) + "&visibility=public&owner=%40me" : "");
+    var repo = gh ? "https://github.com/" + encodeURIComponent(user) + "/" + encodeURIComponent(d) : "";
+    setGo("go-repo", repo); setGo("go-repo2", repo); setGo("go-repo3", repo);
+    setGo("go-pem", ok ? "https://" + d + "/" + PEM_PATH : "");
+    var cards = document.querySelectorAll(".gh-only");
+    for (i = 0; i < cards.length; i++) { cards[i].style.display = (ok && !gh) ? "none" : ""; }
+    $("owndom-note").hidden = !(ok && !gh);
+    try { if (ok) { localStorage.setItem(GH_KEY, raw.trim()); } } catch (e) { }
+  }
+  $("gh").addEventListener("input", refreshDomain);
+  try { var saved = localStorage.getItem(GH_KEY); if (saved) { $("gh").value = saved; } } catch (e) { }
+  refreshDomain();
+
+  // 복사: 누른 순간 execCommand, 안 되면 clipboard API(관문 1 도우미와 같은 순서)
+  function copyText(text, done) {
+    var s = $("scratch");
+    s.value = text; s.focus();
+    try { s.setSelectionRange(0, text.length); } catch (e) { s.select(); }
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    if (ok) { done(true); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    } else { done(false); }
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("button[data-copy]") : null;
+    if (!b) { return; }
+    var v = vals[b.getAttribute("data-copy")] || "";
+    if (!v) { b.textContent = "—"; return; }
+    copyText(v, function (ok) { var old = b.textContent; b.textContent = ok ? "✓" : "✗"; setTimeout(function () { b.textContent = old; }, 1200); });
+  });
+
+  // 공개키: P-256, 비밀 키는 extractable=false(꺼낼 수 없음). SPKI PEM(공용 앱 주소에서 받아들여진 파일과 같은 구조, 2026-09-26 openssl 대조)
+  $("mk").addEventListener("click", function () {
+    if (!(window.crypto && crypto.subtle)) { $("pem").value = t("이 브라우저에서는 만들 수 없습니다. 사파리나 크롬으로 여세요.", "This browser cannot make keys. Open in Safari or Chrome."); return; }
+    crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, false, ["sign", "verify"]).then(function (kp) {
+      return crypto.subtle.exportKey("spki", kp.publicKey);
+    }).then(function (buf) {
+      var u = new Uint8Array(buf), bin = "";
+      for (var i = 0; i < u.length; i++) { bin += String.fromCharCode(u[i]); }
+      var pem = "-----BEGIN PUBLIC KEY-----\n" + btoa(bin).match(/.{1,64}/g).join("\n") + "\n-----END PUBLIC KEY-----\n";
+      vals.pem = pem; $("pem").value = pem;
+    }, function () { $("pem").value = t("만들지 못했습니다.", "Could not make a key."); });
+  });
+
+  // 한 줄 = WC1.<base64url(JSON)>.<FNV-1a 32비트 8자리> — watch.html 이 잘린 붙여넣기를 이 값으로 잡는다
+  function fnv(s) { var h = 0x811c9dc5; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ("0000000" + h.toString(16)).slice(-8); }
+  function b64url(str) { return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); }
+  $("bundle").addEventListener("click", function () {
+    var c = $("cid").value.trim(), s = $("sec").value.trim(), d = domainOf($("gh").value);
+    var err = "";
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(c)) { err = t("Client ID 모양이 다릅니다(8-4-4-4-12 글자). 9번 카드를 다시 보세요.", "Client ID looks wrong (8-4-4-4-12). See card 9."); }
+    else if (s.length < 16 || /\s/.test(s)) { err = t("Client Secret을 확인하세요(눈 아이콘으로 보이게 한 뒤 전부 복사).", "Check the Client Secret (show it with the eye icon, then copy all)."); }
+    else { err = domainError(d); }
+    if (err) { $("bmsg").textContent = err; $("bmsg").className = "bad"; return; }
+    var mid = b64url(JSON.stringify({ c: c, s: s, d: d }));
+    var line = "WC1." + mid + "." + fnv(mid);
+    copyText(line, function (ok) {
+      $("bmsg").textContent = ok ? t("복사했습니다. 시계에서 「내 개발자 계정」을 누르세요(11번 카드).", "Copied. Now open “My developer account” on the watch (card 11).")
+                                 : t("복사가 막혔습니다. 다시 눌러 주세요.", "Copy was blocked. Tap again.");
+      $("bmsg").className = ok ? "ok" : "bad";
+    });
+  });
+
+  $("clear").addEventListener("click", function () {
+    copyText(" ", function (ok) { $("clear").textContent = ok ? "✓" : "✗"; });
+    $("sec").value = "";
+  });
+})();
+</script>
+</main>
+</body>
+</html>
+<!-- v⁠​‌​​​​‌‌​‌​​​​‌‌​​‌‌‌​‌​​​‌‌​​‌​​​‌‌​‌‌​​​‌‌​​​‌​​‌‌​​​​​​‌‌​​​​​​‌‌​​‌​​​‌‌​​​‌​​‌‌​​‌​​​‌‌​​​​​​‌‌​‌‌‌​​‌‌‌​‌​​‌‌​​​‌​​​‌‌​​​​​​‌‌‌​​‌​‌‌​​​‌​​‌‌​​​‌‌​‌‌​​​​‌​‌‌​​​‌‌​‌‌​​‌​​​​‌‌​​​​​‌‌​​​‌‌​​‌‌​​​‌​‌‌​​‌​‌​‌‌​​‌​‌​​‌‌‌​​​​​‌‌​‌‌​​​‌‌​‌​‌​​‌‌‌​‌​​​‌‌​​​‌​‌‌​​‌​‌​‌‌​​‌​​​​‌‌​​‌​​‌‌​​​‌‌​​‌‌​​‌‌​‌‌​​​​‌​​‌‌‌​​‌​‌‌​​​​‌​‌‌​​‌‌​​​‌‌​​​​​​‌‌​‌​‌​​‌‌​​‌​​‌‌​​​‌‌​‌‌​​​​‌​​‌‌‌​​‌ -->
